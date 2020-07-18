@@ -20,3 +20,77 @@
 // Add a listener for click events so that when a user clicks on a card, the headline of the article is logged to the console.
 //
 // Use your function to create a card for each of the articles, and append each card to the DOM.
+
+function ArticleMachine(object){
+    const card = document.createElement('div')
+    const newHeadline = document.createElement('div')
+    const author = document.createElement('author')
+    const portraitBox = document.createElement('div')
+    const portrait = document.createElement('img')
+    const by = document.createElement('span')
+
+    card.appendChild(newHeadline)
+    card.appendChild(author)
+    author.appendChild(portraitBox)
+    portraitBox.appendChild(portrait)
+    author.appendChild(by)
+
+    card.className = 'card'
+    newHeadline.className = 'headline'
+    author.className = 'author'
+    portraitBox.className = 'img-container'
+
+    newHeadline.textContent = `${object.headline}`
+    portrait.src = object.authorPhoto
+    by.textContent = `By: ${object.authorName}`
+
+    card.addEventListener('click', event => {
+        console.log(newHeadline)
+    })
+
+    return card
+}
+
+const cardsContainer = document.querySelector('.cards-container')
+
+const articleURL = 'https://lambda-times-backend.herokuapp.com/articles'
+axios.get(articleURL)
+.then( function (value){
+    const bootstrapArticles = value.data.articles.bootstrap
+    const javascriptArticles = value.data.articles.javascript
+    const nodeArticles = value.data.articles.node
+    const jqueryArticles = value.data.articles.jquery
+    const technologyArticles = value.data.articles.technology
+
+    console.log(bootstrapArticles)
+    bootstrapArticles.forEach(object => {
+        const card = ArticleMachine(object)
+        cardsContainer.appendChild(card)
+        console.log('bootstrap function working')
+    })
+   
+    javascriptArticles.forEach(object => {
+        const card = ArticleMachine(object)
+        cardsContainer.appendChild(card)
+    })
+
+    nodeArticles.forEach(object => {
+        const card = ArticleMachine(object)
+        cardsContainer.appendChild(card)
+    })
+
+    jqueryArticles.forEach(object => {
+        const card = ArticleMachine(object)
+        cardsContainer.appendChild(card)
+    })
+
+    technologyArticles.forEach(object => {
+        const card = ArticleMachine(object)
+        cardsContainer.appendChild(card)
+    })
+   
+    console.log('article success start')
+})
+.catch(function (error){
+    console.log('article error')
+})
